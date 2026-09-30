@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "playerhud:block/enhancement_altar"
+    }
+  }
+}
