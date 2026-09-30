@@ -29,6 +29,14 @@ $env:GRADLE_USER_HOME='C:\MinecraftHUD\.gradle-user'
 - 경험치 획득 시 바닐라 경험치 바 형태를 상단에 표시하고, 직업명/전투 레벨·현재 XP·획득 XP를 같은 색 계열 글씨로 함께 표시.
 - 오른쪽 위 HUD에는 플레이어 정보, 온라인 인원, 직업 레벨, 전투 레벨, 돈 표시가 있다.
 - 전투 레벨의 합의된 누적 능력 목표: 공격력 최대 +30%, 피해 감소 최대 30%, 최대 체력 +5하트. 세부 10레벨 보상은 `JobSystem.java`의 현재 구현을 우선 확인한다.
+
+### 직업 거래소 — 1차 구현
+
+- `/pmarket list miner|farmer|fisher`로 직업별 거래 품목과 기본 매입가를 확인하고, `/pmarket sell <아이템ID> [수량]`으로 판매한다. 한 번에 2,304개까지, 메인 인벤토리/핫바의 아이템만 거래한다. 요청한 수량이 부족하면 부분 차감 없이 거래를 거절한다.
+- 판매 가능한 품목은 `TradeSystem.java`에 직업별로 명시한 화폐 자원/작물/물고기만이다. Farmer’s Delight와 Aquaculture는 선택 의존성으로 다뤄, 해당 모드가 빠진 환경에서도 PlayerHUD가 로드되고 미설치 모드 품목은 목록에서 숨긴다.
+- 판매는 어느 직업이든 할 수 있지만, 해당 품목 직업을 선택한 플레이어만 기존 가격 보너스를 받는다. Lv.20 +5%, Lv.80부터 추가 +10%; 묶음 총액에 적용하고 원 단위로 반올림한다.
+- 단가는 Lv.50 자원 2배/어획 2배, 광부 Lv.40 광맥 채굴·Lv.70 추가 광물, 농부 광역 수확·자동 재심기, 어부 입질 가속 및 전설 어획의 생산량 차이를 고려한 시작값이다. 광부 자동 제련 전후(원석/주괴)는 같은 매입가로 처리한다. 자세한 전체 가격표는 `docs/JOB_MARKET.md`.
+- Aquaculture 낚싯대, 미끼(미노우 포함), 낚싯줄, 부품, 장비, 보물 상자는 허용 목록에 넣지 않는다. `minnow`는 물고기가 아닌 미끼로 등록된 점에 주의한다.
 - 직업 선택 화면은 어두운 카드 UI와 마인크래프트 기본 `Button.builder` 버튼을 사용한다.
 
 ### 직업 효과 및 작물·낚시
@@ -75,6 +83,7 @@ $env:GRADLE_USER_HOME='C:\MinecraftHUD\.gradle-user'
 ## 코드에서 먼저 확인할 파일
 
 - `PlayerHudMod.java`, `ModItems.java`, `ModCreativeTabs.java`, `HudLayer.java`
+- `EconomySystem.java`, `MarketCommand.java`, `TradeSystem.java`, `docs/JOB_MARKET.md`
 - `JobSystem.java`, `JobNetwork.java`, `JobType.java`, `JobSelectionScreen.java`
 - `BossArenaManager.java`, `BossCommand.java`, `BossTicketItem.java`
 - `EnhancementSystem.java`, `EnhancementMenu.java`, `EnhancementScreen.java`
@@ -88,3 +97,4 @@ $env:GRADLE_USER_HOME='C:\MinecraftHUD\.gradle-user'
 3. 기존 UI와 구현된 기능을 제거하지 말고 필요한 범위만 수정한다.
 4. 바뀐 내용을 빌드하고, 인게임 테스트 결과와 컴파일 확인을 구분해서 보고한다.
 5. 사용자가 명시적으로 요청하지 않은 외부 메시지 전송, 서버 배포, 월드 데이터 변경은 하지 않는다.
+
