@@ -107,12 +107,8 @@ public class JobSystem {
             return 1.0;
         }
 
-        boolean supportedItem = switch (job) {
-            case MINER -> isOreItem(item);
-            case FARMER -> isFarmProduce(item);
-            case FISHER -> isFishItem(item);
-        };
-        if (!supportedItem) {
+        TradeSystem.TradeEntry tradeEntry = TradeSystem.getEntry(item.getItem());
+        if (tradeEntry == null || tradeEntry.job() != job) {
             return 1.0;
         }
 
@@ -1217,4 +1213,5 @@ public class JobSystem {
         );
     }
 }
+
 
