@@ -9,10 +9,12 @@ Minecraft 1.21.1과 NeoForge 21.1.252용 커스텀 RPG 모드입니다. 직업·
 - 입장권으로 시작하는 보스전, 보스 체력바, Clear/Defeat 처리 및 귀환
 - 강화 대장간 GUI, 50단계 장비 강화, 강화 재료와 하락 보호권
 - 인벤토리 보호권
+- 직업별 원자재/가공식품 매입 거래소와 직업 레벨 판매 보너스
 - 10종 라이딩 소환 아이템과 추첨권, 확률·등급 표시, JEI/크리에이티브 탭 등록
 - 명령어로 보스/보호권/라이딩 아이템 지급
 
 현재 구현과 합의된 설정의 상세 인계 기록은 [`docs/PROJECT_CONTEXT_HANDOFF.md`](docs/PROJECT_CONTEXT_HANDOFF.md)를 참고하세요.
+거래 가능한 품목과 시작 가격, 명령어는 [`docs/JOB_MARKET.md`](docs/JOB_MARKET.md)에 정리했습니다.
 
 ## 개발 환경
 
@@ -48,6 +50,14 @@ bash ./gradlew build
 /priding give @p riding_white_horse 1
 ```
 
+직업 거래소 명령 예시:
+
+```text
+/pmarket list farmer
+/pmarket sell farmersdelight:cabbage 16
+```
+
 ## 라이선스
 
 `TEMPLATE_LICENSE.txt`는 NeoForge MDK 템플릿에서 제공된 파일에만 적용됩니다. 모드의 프로젝트 소스 코드는 `gradle.properties` 기준 All Rights Reserved이며, 공개 저장소라는 사실만으로 복제·수정·재배포 권한이 부여되지는 않습니다.
+
